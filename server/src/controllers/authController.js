@@ -7,24 +7,30 @@ const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 /**
  * Helper to set the HTTP-only session cookie
  */
-function setSessionCookie(res, sessionId) {
-  res.cookie('tb_session', sessionId, {
+function getSessionCookieOptions() {
+  const isProduction = config.nodeEnv === 'production' || process.env.NODE_ENV === 'production';
+  return {
     httpOnly: true,
-    secure: config.nodeEnv === 'production',
-    sameSite: config.nodeEnv === 'production' ? 'none' : 'lax',
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
     maxAge: SESSION_DURATION_MS,
     path: '/'
-  });
+  };
+}
+
+function setSessionCookie(res, sessionId) {
+  res.cookie('tb_session', sessionId, getSessionCookieOptions());
 }
 
 /**
  * Helper to clear session cookie
  */
 function clearSessionCookie(res) {
+  const isProduction = config.nodeEnv === 'production' || process.env.NODE_ENV === 'production';
   res.clearCookie('tb_session', {
     httpOnly: true,
-    secure: config.nodeEnv === 'production',
-    sameSite: config.nodeEnv === 'production' ? 'none' : 'lax',
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
     path: '/'
   });
 }

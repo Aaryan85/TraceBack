@@ -31,38 +31,48 @@ import {
 
 const app = express();
 
-// Security and standard parsing middlewares
-const allowedOrigins = [
-  config.clientOrigin,
-  config.clientOrigin?.replace(/\/$/, ''),
+// Trust reverse proxy (e.g. Render, Nginx, AWS ELB) for secure cookies and accurate HTTPS detection
+app.set('trust proxy', 1);
+
+// Explicit approved origins for credentialed cross-origin requests
+const ALLOWED_ORIGINS = [
+  'https://traceback-djs9.onrender.com',
   'http://localhost:5173',
   'http://127.0.0.1:5173'
-].filter(Boolean);
+];
+
+if (config.clientOrigin) {
+  const customOrigin = config.clientOrigin.trim().replace(/\/$/, '');
+  if (customOrigin && !ALLOWED_ORIGINS.includes(customOrigin)) {
+    ALLOWED_ORIGINS.push(customOrigin);
+  }
+}
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow non-browser requests (curl, server-to-server, mobile)
-    if (!origin) return callback(null, true);
-    
-    const normalizedOrigin = origin.replace(/\/$/, '');
-    const isAllowed = allowedOrigins.some(allowed => allowed.replace(/\/$/, '') === normalizedOrigin)
-      || normalizedOrigin.endsWith('.onrender.com')
-      || normalizedOrigin.endsWith('.vercel.app')
-      || normalizedOrigin.includes('localhost')
-      || normalizedOrigin.includes('127.0.0.1');
-
-    if (isAllowed) {
+    // 1. Allow non-browser requests (mobile apps, curl, server-to-server) where origin is undefined
+    if (!origin) {
       return callback(null, true);
     }
-    
-    // In production fallback, allow origin dynamically to support any hosted domain
-    return callback(null, true);
+
+    const normalizedOrigin = origin.trim().replace(/\/$/, '');
+
+    // 2. Strict explicit origin check (never use '*' with credentials: true)
+    if (ALLOWED_ORIGINS.includes(normalizedOrigin)) {
+      return callback(null, true);
+    }
+
+    // 3. Reject unapproved origins without granting CORS access
+    return callback(new Error(`Origin '${origin}' not allowed by CORS policy.`));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Project-Key', 'X-Project-Id']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Project-Key', 'X-Project-Id'],
+  exposedHeaders: ['Set-Cookie'],
+  optionsSuccessStatus: 204
 };
 
+// Register CORS middleware before parsing and all API routes
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
@@ -125,12 +135,15 @@ app.use((req, res) => {
 
 // Global Error Handler
 app.use((err, req, res, next) => {
-  const statusCode = err.status || 500;
+  const isCorsError = err.message && err.message.includes('CORS policy');
+  const statusCode = isCorsError ? 403 : (err.status || 500);
+
   if (statusCode >= 500 && process.env.NODE_ENV !== 'test') {
     console.error('[TraceBack Server Error]', err);
   }
+
   res.status(statusCode).json({
-    error: err.name || 'InternalServerError',
+    error: isCorsError ? 'Forbidden' : (err.name || 'InternalServerError'),
     message: err.message || 'An unexpected error occurred on the server.'
   });
 });
