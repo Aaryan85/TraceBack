@@ -32,12 +32,39 @@ import {
 const app = express();
 
 // Security and standard parsing middlewares
-app.use(cors({
-  origin: [config.clientOrigin, 'http://localhost:5173', 'http://127.0.0.1:5173'],
+const allowedOrigins = [
+  config.clientOrigin,
+  config.clientOrigin?.replace(/\/$/, ''),
+  'http://localhost:5173',
+  'http://127.0.0.1:5173'
+].filter(Boolean);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow non-browser requests (curl, server-to-server, mobile)
+    if (!origin) return callback(null, true);
+    
+    const normalizedOrigin = origin.replace(/\/$/, '');
+    const isAllowed = allowedOrigins.some(allowed => allowed.replace(/\/$/, '') === normalizedOrigin)
+      || normalizedOrigin.endsWith('.onrender.com')
+      || normalizedOrigin.endsWith('.vercel.app')
+      || normalizedOrigin.includes('localhost')
+      || normalizedOrigin.includes('127.0.0.1');
+
+    if (isAllowed) {
+      return callback(null, true);
+    }
+    
+    // In production fallback, allow origin dynamically to support any hosted domain
+    return callback(null, true);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Project-Key', 'X-Project-Id']
-}));
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json({ limit: '100kb' }));
 app.use(cookieParserMiddleware);
