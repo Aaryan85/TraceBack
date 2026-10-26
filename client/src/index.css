@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --tb-bg: #FFFFFF;
+  --tb-sidebar: #F7F7F7;
+  --tb-card: #FFFFFF;
+  --tb-text: #111111;
+  --tb-secondary: #666666;
+  --tb-muted: #888888;
+  --tb-border: #E5E5E5;
+  --tb-hover: #F2F2F2;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--tb-bg);
+  color: var(--tb-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Crisp developer typography */
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', Menlo, Monaco, Consolas, monospace;
+}
+
+/* Subtle clean scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E5E5E5;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D4D4D4;
+}
+
+/* Custom utility classes */
+@layer components {
+  .tb-card {
+    @apply bg-white border border-[#E5E5E5] rounded-md transition-all duration-150;
+  }
+  
+  .tb-btn-primary {
+    @apply inline-flex items-center justify-center px-3.5 py-1.5 text-xs font-medium rounded bg-[#111111] text-white hover:bg-neutral-800 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed shadow-none;
+  }
+  
+  .tb-btn-secondary {
+    @apply inline-flex items-center justify-center px-3.5 py-1.5 text-xs font-medium rounded bg-white text-[#111111] border border-[#E5E5E5] hover:bg-[#F2F2F2] transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .tb-badge {
+    @apply inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium rounded-full border;
+  }
+}

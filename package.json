@@ -1,0 +1,30 @@
+{
+  "name": "traceback-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TraceBack — Developer-first error monitoring and debugging platform",
+  "workspaces": [
+    "client",
+    "server",
+    "packages/*",
+    "demo-app"
+  ],
+  "scripts": {
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "dev:demo": "npm --prefix demo-app run dev",
+    "build:client": "npm --prefix client run build",
+    "test:server": "npm --prefix server test",
+    "test:sdk": "npm --prefix packages/traceback-node test",
+    "test:demo": "npm --prefix demo-app test",
+    "test:all": "npm run test:server && npm run test:sdk && npm run test:demo"
+  },
+  "keywords": [
+    "error-monitoring",
+    "observability",
+    "debugging",
+    "stack-trace"
+  ],
+  "author": "",
+  "license": "MIT"
+}
