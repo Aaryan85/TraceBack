@@ -604,6 +604,9 @@ TRACEBACK_RELEASE=v1.0.0`;
             <p className="text-xs text-[#666666] max-w-sm">
               Application error-monitoring and observability platform for modern Node.js web applications.
             </p>
+            <div className="text-xs text-[#555555] font-medium pt-1">
+              Made with ❤️ by <span className="text-[#111111] font-semibold">Aaryan Yadav</span>
+            </div>
             <div className="text-[11px] text-[#888888]">
               MIT Licensed · Portfolio Capstone Implementation
             </div>
