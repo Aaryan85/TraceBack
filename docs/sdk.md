@@ -1,18 +1,16 @@
-# TraceBack — Node.js SDK Reference (`@traceback/node`)
+# TraceBack — Node.js SDK Reference (`traceback-node`)
 
-The `@traceback/node` package provides lightweight, fail-safe error instrumentation for Node.js backends and Express services.
+The `traceback-node` package provides lightweight, fail-safe error instrumentation for Node.js backends and Express services.
 
 ---
 
 ## 1. Installation
 
-In the TraceBack monorepo workspace, `@traceback/node` is linked automatically. For external Node.js projects, install the package:
+Install the published package from npm:
 
 ```bash
-npm install @traceback/node
+npm install traceback-node
 ```
-
-*Note: For local workspace experimentation, reference the package via `"@traceback/node": "*"` in `package.json`.*
 
 ---
 
@@ -21,7 +19,7 @@ npm install @traceback/node
 Import and initialize the singleton `TraceBack` instance at application startup, before defining Express routes:
 
 ```javascript
-import { TraceBack } from '@traceback/node';
+import { TraceBack } from 'traceback-node';
 
 TraceBack.init({
   endpoint: process.env.TRACEBACK_ENDPOINT || 'http://localhost:3000/api/v1/events',
@@ -54,7 +52,7 @@ TraceBack provides two middlewares for complete, automated Express instrumentati
 
 ```javascript
 import express from 'express';
-import { TraceBack } from '@traceback/node';
+import { TraceBack } from 'traceback-node';
 
 const app = express();
 

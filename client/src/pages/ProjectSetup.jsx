@@ -33,7 +33,10 @@ export const ProjectSetup = ({ onSelectIssue, activeProject = null }) => {
   };
 
   const projectKey = activeProject?.apiKey || "tb_live_demo_key_9823748293";
-  const endpoint = "http://localhost:3000/api/v1/events";
+  const defaultEndpoint = (typeof window !== 'undefined' && window.location.hostname.includes('render.com'))
+    ? 'https://traceback-server.onrender.com/api/v1/events'
+    : 'http://localhost:3000/api/v1/events';
+  const endpoint = defaultEndpoint;
 
   const handleSendTest = async () => {
     try {
@@ -54,10 +57,10 @@ TRACEBACK_PROJECT_KEY=${projectKey}
 TRACEBACK_ENVIRONMENT=production
 TRACEBACK_RELEASE=v1.2.4`;
 
-  const sdkInstallCode = `npm install @traceback/node`;
+  const sdkInstallCode = `npm install traceback-node`;
 
   const expressInitCode = `import express from 'express';
-import { TraceBack } from '@traceback/node';
+import { TraceBack } from 'traceback-node';
 
 // 1. Initialize TraceBack SDK
 TraceBack.init({

@@ -21,7 +21,7 @@ This project was built from scratch as a serious software engineering portfolio 
 - **User Authentication & Session Management:** Complete secure signup, login, logout, and `/api/auth/me` session restoration using Node.js native `crypto.scrypt` password hashing and HTTP-only cookie sessions.
 - **Multi-Project Workspace:** Full project management lifecycle (`/api/projects`) allowing authenticated developers to create, list, switch, update, and delete projects with cross-user isolation.
 - **Dynamic Ingestion Key Management:** Cryptographically secure project-specific keys (`tb_live_<hex>`) with instant key rotation and revocation.
-- **Custom Node.js SDK (`@traceback/node`):** Lightweight, non-blocking error instrumentation featuring automated Express request-context and error-handling middlewares.
+- **Custom Node.js SDK (`traceback-node`):** Lightweight, non-blocking error instrumentation featuring automated Express request-context and error-handling middlewares. Published on npm as `traceback-node`.
 - **Fail-Safe Client Architecture:** SDK calls never crash or block the monitored host application, even during total network failure or backend downtime.
 - **In-Flight Sensitive Data Redaction:** Recursive sanitization scrubs passwords, bearer tokens, API keys, and credit cards before telemetry leaves the host machine.
 - **Deterministic Error Fingerprinting:** SHA-256 grouping algorithm normalizes dynamic variables (UUIDs, timestamps, database IDs, memory addresses) and prioritizes application stack frames over runtime internals.
@@ -83,7 +83,7 @@ This project was built from scratch as a serious software engineering portfolio 
 - **Frontend:** React 18, Vite, Tailwind CSS, Lucide Icons
 - **Backend:** Node.js (v18+), Express, CORS, Dotenv
 - **Database:** MongoDB, Mongoose ODM
-- **SDK Library:** Vanilla Node.js (`@traceback/node`)
+- **SDK Library:** Vanilla Node.js (`traceback-node` on npm)
 - **Testing:** Native Node.js Test Runner (`node:test`, `node:assert/strict`)
 
 ---
@@ -290,7 +290,7 @@ npm run test:demo     # Tests demo application error dispatching
 
 ```javascript
 import express from 'express';
-import { TraceBack } from '@traceback/node';
+import { TraceBack } from 'traceback-node';
 
 // 1. Initialize TraceBack
 TraceBack.init({

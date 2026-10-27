@@ -29,35 +29,35 @@ export const LandingPage = ({
     setTimeout(() => setCopiedSnippet(false), 2000);
   };
 
-  const sampleSdkSnippet = `// 1. Initialize TraceBack SDK
+  const sampleSdkSnippet = `// 1. Install via npm: npm install traceback-node
 import express from 'express';
-import { TraceBack } from '@traceback/node';
+import { TraceBack } from 'traceback-node';
 
+// 2. Initialize TraceBack (Just 4 lines of integration code)
 TraceBack.init({
-  endpoint: 'http://localhost:3000/api/v1/events',
+  endpoint: process.env.TRACEBACK_ENDPOINT || 'https://traceback-server.onrender.com/api/v1/events',
   projectKey: process.env.TRACEBACK_PROJECT_KEY,
   environment: process.env.NODE_ENV || 'production',
-  release: 'v1.0.0',
   service: 'api-service'
 });
 
 const app = express();
 
-// 2. Request context enrichment middleware
+// 3. Request context enrichment (MUST be registered before routes)
 app.use(TraceBack.requestHandler());
 
-// Your application routes
+// Your normal application routes
 app.get('/api/orders', (req, res) => {
-  /* application code */
+  res.json({ ok: true });
 });
 
-// 3. Error handler middleware (must be registered after routes)
+// 4. Automatic error handler middleware (MUST be registered after routes)
 app.use(TraceBack.errorHandler());
 
 app.listen(3000);`;
 
-  const sampleEnvSnippet = `# TraceBack Monitored Service Environment
-TRACEBACK_ENDPOINT=http://localhost:3000/api/v1/events
+  const sampleEnvSnippet = `# TraceBack Ingestion Configuration (Cloud or Local)
+TRACEBACK_ENDPOINT=https://traceback-server.onrender.com/api/v1/events
 TRACEBACK_PROJECT_KEY=tb_live_demo_key_9823748293
 TRACEBACK_ENVIRONMENT=production
 TRACEBACK_RELEASE=v1.0.0`;
@@ -464,7 +464,7 @@ TRACEBACK_RELEASE=v1.0.0`;
           {/* Explicit Note on Future Roadmap */}
           <div className="mt-8 p-4 rounded-md bg-[#F7F7F7] border border-[#E5E5E5] text-xs text-[#666666] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <span className="font-semibold text-[#111111]">Planned Future Features:</span> Multi-tenant user auth & signup, organization workspaces, and AI-assisted root cause analysis are actively being designed for subsequent versions.
+              <span className="font-semibold text-[#111111]">Planned Future Features:</span> Automated Slack & email alert channels, custom webhook integrations, and AI-assisted root cause analysis are actively being designed for subsequent versions.
             </div>
             <span className="font-mono text-[10px] text-[#888888] shrink-0">ROADMAP SCOPE</span>
           </div>
@@ -499,7 +499,7 @@ TRACEBACK_RELEASE=v1.0.0`;
               <div className="text-xs font-mono text-[#888888] mb-3">STEP 02</div>
               <h3 className="text-sm font-semibold text-[#111111] mb-2">Integrate the Node.js SDK</h3>
               <p className="text-xs text-[#666666] leading-relaxed">
-                Add `@traceback/node` to your backend. Initialize `TraceBack.init()` and attach the lightweight Express request and error handlers.
+                Add <code className="font-mono text-[#111111] bg-[#F0F0F0] px-1 py-0.5 rounded">traceback-node</code> to your backend via <code className="font-mono text-[#111111] bg-[#F0F0F0] px-1 py-0.5 rounded">npm install traceback-node</code>. Initialize <code className="font-mono text-[#111111] bg-[#F0F0F0] px-1 py-0.5 rounded">TraceBack.init()</code> and attach the lightweight Express middlewares.
               </p>
             </div>
 
@@ -522,7 +522,7 @@ TRACEBACK_RELEASE=v1.0.0`;
             <div>
               <span className="text-xs font-mono text-[#888888] uppercase tracking-wider">Developer Quickstart</span>
               <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#111111] mt-1.5 mb-2">
-                Five lines of integration code
+                Just 4 lines of integration code
               </h2>
               <p className="text-sm text-[#666666]">
                 Seamless instrumentation for Express, Fastify, or plain Node.js microservices.
@@ -580,7 +580,7 @@ TRACEBACK_RELEASE=v1.0.0`;
           </div>
 
           <div className="mt-4 flex items-center justify-between text-xs text-[#666666]">
-            <span>Monorepo workspace package: <code className="font-mono px-1 py-0.5 bg-[#F7F7F7] border border-[#E5E5E5] rounded">packages/traceback-node</code></span>
+            <span>Published npm package: <code className="font-mono px-1 py-0.5 bg-[#F7F7F7] border border-[#E5E5E5] rounded">npm install traceback-node</code></span>
             <button
               onClick={() => onNavigateToDashboard('setup')}
               className="font-medium text-[#111111] hover:underline"
