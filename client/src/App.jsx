@@ -32,6 +32,7 @@ export default function App() {
   const [currentSection, setCurrentSection] = useState(getInitialSection);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Load active user and project list on startup
   useEffect(() => {
@@ -83,6 +84,7 @@ export default function App() {
     }
 
     setCurrentSection(section);
+    setMobileMenuOpen(false);
     if (section !== 'issue-detail') {
       setSelectedIssue(null);
       window.location.hash = section;
@@ -227,7 +229,7 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-white text-[#111111]">
+    <div className="flex h-screen w-screen overflow-hidden bg-white text-[#111111] relative">
       {/* Sidebar with Project Switcher & User Profile */}
       <Sidebar
         currentSection={currentSection}
@@ -238,6 +240,8 @@ export default function App() {
         onSelectProject={(proj) => setActiveProject(proj)}
         onOpenCreateProject={() => setIsCreateProjectOpen(true)}
         onLogout={handleLogout}
+        mobileOpen={mobileMenuOpen}
+        onCloseMobile={() => setMobileMenuOpen(false)}
       />
 
       {/* Main Content Area */}
@@ -250,10 +254,11 @@ export default function App() {
           isRefreshing={isRefreshing}
           onNavigate={handleNavigate}
           activeProject={activeProject}
+          onToggleMobileMenu={() => setMobileMenuOpen(prev => !prev)}
         />
 
         {/* Scrollable Page Body */}
-        <main className="flex-1 overflow-y-auto p-6 bg-white">
+        <main className="flex-1 overflow-y-auto p-3.5 sm:p-6 bg-white">
           <div className="max-w-6xl mx-auto">
             {/* Empty State for User with No Projects */}
             {projects.length === 0 ? (

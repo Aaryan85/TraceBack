@@ -17,7 +17,9 @@ export const Sidebar = ({
   activeProject,
   onSelectProject,
   onOpenCreateProject,
-  onLogout
+  onLogout,
+  mobileOpen = false,
+  onCloseMobile
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -40,22 +42,51 @@ export const Sidebar = ({
   ];
 
   return (
-    <aside className="w-60 bg-[#F7F7F7] border-r border-[#E5E5E5] flex flex-col justify-between select-none h-screen shrink-0">
-      <div className="flex flex-col min-h-0">
-        {/* Brand Header */}
+    <>
+      {/* Mobile Drawer Backdrop */}
+      {mobileOpen && (
         <div
-          onClick={() => onNavigate('landing')}
-          className="h-12 px-4 flex items-center gap-2.5 border-b border-[#E5E5E5] bg-white cursor-pointer hover:bg-[#FAFAFA] transition-colors"
-          title="Return to Public Homepage"
-        >
-          <div className="w-6 h-6 rounded bg-[#111111] flex items-center justify-center text-white">
-            <span className="font-mono text-xs font-bold leading-none">T</span>
+          className="fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity"
+          onClick={onCloseMobile}
+        />
+      )}
+
+      <aside className={`
+        fixed inset-y-0 left-0 z-50 w-64 bg-[#F7F7F7] border-r border-[#E5E5E5] flex flex-col justify-between select-none
+        transition-transform duration-200 ease-in-out md:static md:translate-x-0 md:h-screen md:shrink-0
+        ${mobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}
+      `}>
+        <div className="flex flex-col min-h-0">
+          {/* Brand Header */}
+          <div className="h-12 px-4 flex items-center justify-between border-b border-[#E5E5E5] bg-white">
+            <div
+              onClick={() => {
+                onNavigate('landing');
+                onCloseMobile && onCloseMobile();
+              }}
+              className="flex items-center gap-2.5 cursor-pointer hover:opacity-80 transition-opacity"
+              title="Return to Public Homepage"
+            >
+              <div className="w-6 h-6 rounded bg-[#111111] flex items-center justify-center text-white">
+                <span className="font-mono text-xs font-bold leading-none">T</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-semibold tracking-tight text-[#111111]">TraceBack</span>
+                <span className="text-[10px] text-[#888888] font-mono leading-none">v1.0.0</span>
+              </div>
+            </div>
+
+            {/* Close button on mobile */}
+            <button
+              onClick={onCloseMobile}
+              className="md:hidden p-1 text-[#888888] hover:text-[#111111] rounded hover:bg-[#F0F0F0]"
+              aria-label="Close menu"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-          <div className="flex flex-col">
-            <span className="text-xs font-semibold tracking-tight text-[#111111]">TraceBack</span>
-            <span className="text-[10px] text-[#888888] font-mono leading-none">v1.0.0-mvp</span>
-          </div>
-        </div>
 
         {/* Dynamic Project Selector Dropdown */}
         <div className="px-3 pt-3 pb-2 relative" ref={dropdownRef}>
@@ -126,7 +157,10 @@ export const Sidebar = ({
             return (
               <button
                 key={item.id}
-                onClick={() => onNavigate(item.id)}
+                onClick={() => {
+                  onNavigate(item.id);
+                  onCloseMobile && onCloseMobile();
+                }}
                 className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium rounded transition-colors text-left ${
                   isActive
                     ? 'bg-white text-[#111111] border border-[#E5E5E5] shadow-[0_1px_2px_rgba(0,0,0,0.02)]'
@@ -143,7 +177,10 @@ export const Sidebar = ({
             Public Site
           </div>
           <button
-            onClick={() => onNavigate('landing')}
+            onClick={() => {
+              onNavigate('landing');
+              onCloseMobile && onCloseMobile();
+            }}
             className="w-full flex items-center gap-2.5 px-2.5 py-1.5 text-xs font-medium rounded text-[#666666] hover:text-[#111111] hover:bg-[#F0F0F0] transition-colors text-left"
           >
             <IconExternalLink className="w-3.5 h-3.5 text-[#888888]" />
@@ -169,7 +206,10 @@ export const Sidebar = ({
             </div>
 
             <button
-              onClick={onLogout}
+              onClick={() => {
+                onLogout();
+                onCloseMobile && onCloseMobile();
+              }}
               className="w-full py-1 px-2 border border-[#E5E5E5] rounded text-[11px] font-medium text-[#666666] hover:text-[#111111] hover:bg-[#F7F7F7] transition-colors text-center"
             >
               Sign Out
@@ -186,5 +226,6 @@ export const Sidebar = ({
         )}
       </div>
     </aside>
+  </>
   );
 };

@@ -23,6 +23,7 @@ export const LandingPage = ({
   const [activeTab, setActiveTab] = useState('sdk'); // 'sdk' | 'env'
   const [showcaseTab, setShowcaseTab] = useState('issues'); // 'issues' | 'detail'
   const [archTab, setArchTab] = useState('diagram'); // 'diagram' | 'redaction' | 'fingerprint' | 'failsafe'
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const copyCode = (text) => {
     navigator.clipboard.writeText(text);
@@ -67,15 +68,15 @@ TRACEBACK_RELEASE=v1.0.0`;
     <div className="min-h-screen bg-white text-[#111111] flex flex-col font-sans selection:bg-[#E5E5E5] selection:text-[#111111]">
       {/* 1. Header / Navigation */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-[#E5E5E5]">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           {/* Brand Logo & Name */}
-          <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded bg-[#111111] flex items-center justify-center text-white font-mono font-bold text-sm">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-7 h-7 rounded bg-[#111111] flex items-center justify-center text-white font-mono font-bold text-sm shrink-0">
               T
             </div>
             <div className="flex items-center gap-2">
               <span className="font-semibold text-sm tracking-tight text-[#111111]">TraceBack</span>
-              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-[#F7F7F7] border border-[#E5E5E5] text-[#666666]">
+              <span className="hidden sm:inline-block text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-[#F7F7F7] border border-[#E5E5E5] text-[#666666]">
                 Developer Edition
               </span>
             </div>
@@ -91,33 +92,90 @@ TRACEBACK_RELEASE=v1.0.0`;
           </nav>
 
           {/* Action CTAs */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 sm:gap-2.5">
             {user ? (
               <button
                 onClick={() => onNavigateToDashboard('overview')}
-                className="px-3.5 py-1.5 text-xs font-medium bg-[#111111] text-white rounded hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
+                className="px-3 sm:px-3.5 py-1.5 text-xs font-medium bg-[#111111] text-white rounded hover:bg-neutral-800 transition-colors flex items-center gap-1"
               >
-                <span>Go to Workspace</span>
+                <span>Workspace</span>
                 <IconChevronRight className="w-3.5 h-3.5" />
               </button>
             ) : (
               <>
                 <button
                   onClick={onNavigateToLogin}
-                  className="px-3 py-1.5 text-xs font-medium text-[#111111] hover:text-black hover:bg-[#F7F7F7] rounded border border-transparent transition-colors"
+                  className="px-2.5 sm:px-3 py-1.5 text-xs font-medium text-[#111111] hover:text-black hover:bg-[#F7F7F7] rounded border border-transparent transition-colors"
                 >
                   Log in
                 </button>
                 <button
                   onClick={onNavigateToSignup}
-                  className="px-3.5 py-1.5 text-xs font-medium bg-[#111111] text-white rounded hover:bg-neutral-800 transition-colors"
+                  className="px-3 sm:px-3.5 py-1.5 text-xs font-medium bg-[#111111] text-white rounded hover:bg-neutral-800 transition-colors"
                 >
-                  Get started for free
+                  <span className="hidden sm:inline">Get started for free</span>
+                  <span className="sm:hidden">Sign up</span>
                 </button>
               </>
             )}
+
+            {/* Mobile Navigation Toggle Button */}
+            <button
+              onClick={() => setMobileNavOpen(!mobileNavOpen)}
+              className="md:hidden p-1.5 rounded text-[#666666] hover:text-[#111111] hover:bg-[#F7F7F7] transition-colors ml-1"
+              aria-label="Toggle navigation"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {mobileNavOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
           </div>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileNavOpen && (
+          <div className="md:hidden border-b border-[#E5E5E5] bg-white px-6 py-4 space-y-3 text-xs font-medium text-[#666666] shadow-sm">
+            <a
+              href="#features"
+              onClick={() => setMobileNavOpen(false)}
+              className="block py-1 hover:text-[#111111] transition-colors"
+            >
+              Features
+            </a>
+            <a
+              href="#how-it-works"
+              onClick={() => setMobileNavOpen(false)}
+              className="block py-1 hover:text-[#111111] transition-colors"
+            >
+              How it works
+            </a>
+            <a
+              href="#architecture"
+              onClick={() => setMobileNavOpen(false)}
+              className="block py-1 hover:text-[#111111] transition-colors"
+            >
+              Architecture Flow
+            </a>
+            <a
+              href="#quickstart"
+              onClick={() => setMobileNavOpen(false)}
+              className="block py-1 hover:text-[#111111] transition-colors"
+            >
+              SDK Quickstart
+            </a>
+            <a
+              href="#preview"
+              onClick={() => setMobileNavOpen(false)}
+              className="block py-1 hover:text-[#111111] transition-colors"
+            >
+              Product Preview
+            </a>
+          </div>
+        )}
       </header>
 
       {/* 2. Hero Section */}
@@ -533,10 +591,10 @@ TRACEBACK_RELEASE=v1.0.0`;
             </div>
 
             {/* Interactive View Selector */}
-            <div className="inline-flex p-0.5 rounded border border-[#E5E5E5] bg-[#F7F7F7] text-xs shrink-0">
+            <div className="flex overflow-x-auto max-w-full pb-1 p-0.5 rounded border border-[#E5E5E5] bg-[#F7F7F7] text-xs shrink-0">
               <button
                 onClick={() => setArchTab('diagram')}
-                className={`px-3 py-1 font-medium rounded transition-colors ${
+                className={`px-3 py-1 font-medium rounded transition-colors whitespace-nowrap shrink-0 ${
                   archTab === 'diagram' ? 'bg-white text-[#111111] shadow-sm' : 'text-[#666666] hover:text-[#111111]'
                 }`}
               >
@@ -544,7 +602,7 @@ TRACEBACK_RELEASE=v1.0.0`;
               </button>
               <button
                 onClick={() => setArchTab('redaction')}
-                className={`px-3 py-1 font-medium rounded transition-colors ${
+                className={`px-3 py-1 font-medium rounded transition-colors whitespace-nowrap shrink-0 ${
                   archTab === 'redaction' ? 'bg-white text-[#111111] shadow-sm' : 'text-[#666666] hover:text-[#111111]'
                 }`}
               >
@@ -552,7 +610,7 @@ TRACEBACK_RELEASE=v1.0.0`;
               </button>
               <button
                 onClick={() => setArchTab('fingerprint')}
-                className={`px-3 py-1 font-medium rounded transition-colors ${
+                className={`px-3 py-1 font-medium rounded transition-colors whitespace-nowrap shrink-0 ${
                   archTab === 'fingerprint' ? 'bg-white text-[#111111] shadow-sm' : 'text-[#666666] hover:text-[#111111]'
                 }`}
               >
@@ -560,7 +618,7 @@ TRACEBACK_RELEASE=v1.0.0`;
               </button>
               <button
                 onClick={() => setArchTab('failsafe')}
-                className={`px-3 py-1 font-medium rounded transition-colors ${
+                className={`px-3 py-1 font-medium rounded transition-colors whitespace-nowrap shrink-0 ${
                   archTab === 'failsafe' ? 'bg-white text-[#111111] shadow-sm' : 'text-[#666666] hover:text-[#111111]'
                 }`}
               >

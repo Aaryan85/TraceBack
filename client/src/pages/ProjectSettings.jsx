@@ -158,7 +158,7 @@ export const ProjectSettings = ({ activeProject, onProjectUpdated, onProjectDele
 
       {/* Ingestion Key Management */}
       <Card className="p-5">
-        <div className="flex items-start justify-between mb-3">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
           <div>
             <h2 className="text-xs font-semibold uppercase tracking-wider text-[#888888]">
               Project Ingestion Key
@@ -170,14 +170,14 @@ export const ProjectSettings = ({ activeProject, onProjectUpdated, onProjectDele
           <button
             onClick={handleRotateKey}
             disabled={rotating}
-            className="px-2.5 py-1 text-xs text-[#111111] border border-[#E5E5E5] rounded hover:bg-[#F7F7F7] flex items-center gap-1.5 disabled:opacity-50 transition-colors"
+            className="self-start sm:self-auto px-2.5 py-1 text-xs text-[#111111] border border-[#E5E5E5] rounded hover:bg-[#F7F7F7] flex items-center gap-1.5 disabled:opacity-50 transition-colors"
           >
             <IconRefresh className={`w-3.5 h-3.5 ${rotating ? 'animate-spin' : ''}`} />
             <span>{rotating ? 'Rotating...' : 'Rotate Key'}</span>
           </button>
         </div>
 
-        <div className="p-3 bg-[#F7F7F7] border border-[#E5E5E5] rounded flex items-center justify-between gap-3">
+        <div className="p-3 bg-[#F7F7F7] border border-[#E5E5E5] rounded flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <code className="text-xs font-mono font-medium text-[#111111] truncate select-all">
             {apiKey}
           </code>

@@ -89,16 +89,16 @@ export const Issues = ({ onSelectIssue, onNavigateToSetup, activeProject = null 
           <p className="text-xs text-[#666666]">Aggregated error groups and stack traces</p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Search Box */}
-          <div className="relative">
+          <div className="relative flex-1 sm:flex-none min-w-[180px]">
             <IconSearch className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#888888]" />
             <input
               type="text"
               placeholder="Search type or message..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 pr-3 py-1.5 text-xs border border-[#E5E5E5] rounded bg-white text-[#111111] placeholder-[#888888] focus:outline-none focus:border-[#111111] w-64"
+              className="pl-8 pr-3 py-1.5 text-xs border border-[#E5E5E5] rounded bg-white text-[#111111] placeholder-[#888888] focus:outline-none focus:border-[#111111] w-full sm:w-64"
             />
           </div>
 
@@ -196,13 +196,14 @@ export const Issues = ({ onSelectIssue, onNavigateToSetup, activeProject = null 
           />
         </Card>
       ) : (
-        <div className="border border-[#E5E5E5] rounded-md overflow-hidden bg-white shadow-none">
-          {/* Table Headers */}
-          <div className="grid grid-cols-12 gap-4 px-4 py-2.5 bg-[#F7F7F7] border-b border-[#E5E5E5] text-[11px] font-medium text-[#666666] uppercase tracking-wider">
-            <div className="col-span-7">Issue & Message</div>
-            <div className="col-span-2 text-center">Events</div>
-            <div className="col-span-3 text-right">Last Seen</div>
-          </div>
+        <div className="border border-[#E5E5E5] rounded-md overflow-x-auto bg-white shadow-none">
+          <div className="min-w-[600px]">
+            {/* Table Headers */}
+            <div className="grid grid-cols-12 gap-4 px-4 py-2.5 bg-[#F7F7F7] border-b border-[#E5E5E5] text-[11px] font-medium text-[#666666] uppercase tracking-wider">
+              <div className="col-span-7">Issue & Message</div>
+              <div className="col-span-2 text-center">Events</div>
+              <div className="col-span-3 text-right">Last Seen</div>
+            </div>
 
           {/* Table Body */}
           <div className="divide-y divide-[#E5E5E5]">
@@ -293,6 +294,7 @@ export const Issues = ({ onSelectIssue, onNavigateToSetup, activeProject = null 
               </div>
             </div>
           )}
+          </div>
         </div>
       )}
     </div>

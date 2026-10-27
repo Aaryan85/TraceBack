@@ -9,6 +9,7 @@ export function normalizeErrorMessage(message) {
 
   return message
     .replace(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/g, '{UUID}') // UUIDs
+    .replace(/\b[0-9a-fA-F]{24}\b/g, '{ID}') // MongoDB ObjectIds / 24-char hex hashes
     .replace(/0x[0-9a-fA-F]+/g, '{HEX}') // Memory addresses
     .replace(/\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z?\b/g, '{TIMESTAMP}') // ISO dates
     .replace(/\d+(?:\.\d+)?(?:ms|s|m|h|px|em|rem|kb|mb|gb|bytes)?\b/gi, '{N}') // Numbers with optional units (e.g. 5000ms, 12kb)
@@ -16,6 +17,8 @@ export function normalizeErrorMessage(message) {
     .replace(/\s+/g, ' ') // Collapse extra whitespace
     .trim();
 }
+
+export const normalizeMessage = normalizeErrorMessage;
 
 /**
  * Extracts top application-level frames from stack trace for fingerprinting
